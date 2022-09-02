@@ -1,52 +1,23 @@
 import React, { useState } from "react";
+import AgregarGasto from "./Components/AgregarGasto";
+import GastosMes from "./Components/GastosMes";
+import Suma from "./Components/Suma";
+import UserContext from "./Context/userContext";
+import "./App.css";
 
 function App() {
-  const [gastos, setGastos] = useState([100, 300, 200])
-  
-  return (
-    <>
-      <Suma gastos={gastos} />
-      <GastosMes gastos={gastos}/>
-      <AgregarGasto setGastos={setGastos}/>
-    </>
-  );
-}
+  const [gastos, setGastos] = useState ([])
 
-function Suma ({gastos}){
-  let total=0
-  for (let i=0; i<gastos.length; i++)
-  total += Number (gastos[i])
-  
-  return(
-    <div>El gasto total es: {total}</div>
-  );
-}
-
-function GastosMes ({gastos}){
-  
-
-return (
-  <ul>
-    {gastos.map ((gasto) =>( <li key = {gasto}>{gasto}</li>
-    ))}
-  </ul>
-);
-}
-
-function AgregarGasto ({setGastos}) {
-  function handleSubmit (event) {
-    event.preventDefault ();
-    const gasto = event.target.elements.gasto.value;
-    setGastos (e=>[...e, gasto])
+  function agregarGasto (gasto) {
+    setGastos([...gastos, gasto])
   }
-
-return (
-  <form onSubmit = {handleSubmit}>
-    <input autoComplete="off" type = "number" id = "gasto"/>
-    <button type="Submit"> Agregar gasto </button>
-  </form>
-)
+  
+  return ( 
+    <UserContext.Provider value={{gastos, agregarGasto}}>
+      <Suma />
+      <GastosMes />
+      <AgregarGasto />
+    </UserContext.Provider>
+  );
 }
-
-
 export default App;
